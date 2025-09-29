@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,10 +8,13 @@
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #ffffff);
       color: white;
       text-align: center;
       overflow-x: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #ffffff);
+      background-size: 200% 200%;
+      transition: background-position 0.1s;
     }
 
     header {
@@ -36,6 +38,7 @@
       margin: 30px 0;
       box-shadow: 0 0 40px rgba(255, 70, 0, 0.8);
       animation: zoomIn 1.5s ease-in-out;
+      transition: transform 0.2s;
     }
 
     .buttons {
@@ -60,6 +63,11 @@
     .btn:hover {
       transform: scale(1.1);
       box-shadow: 0 0 40px rgba(255, 100, 50, 1);
+    }
+
+    .view-counter {
+      font-size: 1.2em;
+      margin: 20px 0;
     }
 
     footer {
@@ -98,30 +106,57 @@
   <div class="buttons">
     <a class="btn" href="https://www.roblox.com/games/117568312093435/SWORD-FIGHT#!/store" target="_blank">🎮 Entrar al Juego</a>
     <a class="btn" href="https://www.roblox.com/game-pass/1502094875/Donation" target="_blank">💖 Donar</a>
+    <a class="btn" href="https://www.roblox.com/users/101989127/profile" target="_blank">👤 Follow Creator</a>
   </div>
+
+  <!-- Contador de vistas global -->
+  <div class="view-counter">👁️ Vistas de esta página: <span id="views">0</span></div>
 
   <!-- Música de fondo -->
   <audio id="bg-music" autoplay loop>
-    <!-- Sustituye este MP3 por el link a la música que quieras -->
-    <source src="https://www.bensound.com/bensound-music/bensound-epic.mp3" type="audio/mpeg">
+    <source src="https://www.bensound.com/bensound-music/bensound-summer.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Sonido para botones -->
+  <!-- Sonidos -->
   <audio id="hover-sound">
     <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg">
   </audio>
+  <audio id="click-sound">
+    <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" type="audio/ogg">
+  </audio>
 
   <script>
-    // Reproducir sonido al pasar por los botones
     const buttons = document.querySelectorAll('.btn');
     const hoverSound = document.getElementById('hover-sound');
+    const clickSound = document.getElementById('click-sound');
+    const viewsCounter = document.getElementById('views');
 
+    // Sonido hover y click
     buttons.forEach(btn => {
       btn.addEventListener('mouseenter', () => {
         hoverSound.currentTime = 0;
         hoverSound.play();
       });
+      btn.addEventListener('click', () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
     });
+
+    // Movimiento del fondo con el mouse (efecto parallax)
+    document.addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.body.style.backgroundPosition = `${x}% ${y}%`;
+    });
+
+    // Contador de vistas global usando CountAPI
+    fetch('https://api.countapi.xyz/hit/sword-fight/total-visits')
+      .then(response => response.json())
+      .then(data => {
+        viewsCounter.textContent = data.value;
+      })
+      .catch(err => console.error('Error al obtener el contador:', err));
   </script>
 
   <footer>
@@ -129,4 +164,3 @@
   </footer>
 </body>
 </html>
-```
